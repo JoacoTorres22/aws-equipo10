@@ -11,5 +11,8 @@ __pycache__/
 # Node
 node_modules/
 
+# SAM build output
+.aws-sam/
+
 # OS files
 .DS_Store
