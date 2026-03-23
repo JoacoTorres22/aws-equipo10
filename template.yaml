@@ -23,6 +23,12 @@ Resources:
       ManagedPolicyArns:
         - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
 
+  F1Api:
+    Type: AWS::Serverless::Api
+    Properties:
+      Name: f1-api
+      StageName: prod
+
   DriversFunction:
     Type: AWS::Serverless::Function
     Properties:
@@ -30,3 +36,30 @@ Resources:
       Handler: handler.handler
       CodeUri: ./lambda-functions/drivers
       Role: !GetAtt LambdaExecutionRole.Arn
+      Events:
+        GetDrivers:
+          Type: Api
+          Properties:
+            RestApiId: !Ref F1Api
+            Path: /drivers
+            Method: GET
+
+  GetSessionFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: f1-get-session
+      Handler: handler.handler
+      CodeUri: ./lambda-functions/get-session
+      Role: !GetAtt LambdaExecutionRole.Arn
+      Events:
+        GetSession:
+          Type: Api
+          Properties:
+            RestApiId: !Ref F1Api
+            Path: /session
+            Method: GET
+
+Outputs:
+  ApiUrl:
+    Description: URL base del API Gateway
+    Value: !Sub "https://${F1Api}.execute-api.${AWS::Region}.amazonaws.com/prod"
