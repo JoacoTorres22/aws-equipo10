@@ -59,6 +59,36 @@ Resources:
             Path: /session
             Method: GET
 
+  ListSessionsFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: f1-list-sessions
+      Handler: handler.handler
+      CodeUri: ./lambda-functions/list-sessions
+      Role: !GetAtt LambdaExecutionRole.Arn
+      Events:
+        ListSessions:
+          Type: Api
+          Properties:
+            RestApiId: !Ref F1Api
+            Path: /list-sessions
+            Method: GET
+
+  DriverSummaryFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: f1-driver-summary
+      Handler: handler.handler
+      CodeUri: ./lambda-functions/driver-summary
+      Role: !GetAtt LambdaExecutionRole.Arn
+      Events:
+        DriverSummary:
+          Type: Api
+          Properties:
+            RestApiId: !Ref F1Api
+            Path: /driver-summary
+            Method: GET
+
 Outputs:
   ApiUrl:
     Description: URL base del API Gateway
